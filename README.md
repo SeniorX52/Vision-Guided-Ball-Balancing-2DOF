@@ -114,5 +114,5 @@ The system is controlled primarily through a **Java-based Graphical User Interfa
 12. **External Control (Optional)**: The GUI can connect to **MATLAB or Python** scripts via **TCP/IP**, allowing control signals to be generated externally, facilitating experimentation with advanced control techniques.
 
 ## Contributors
--Ali Emad
--Marawan ElSayed
+- Ali Emad
+- Marawan ElSayed
