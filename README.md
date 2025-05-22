@@ -24,7 +24,7 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 | **Laser Tracking** | Ball chases a moving laser dot projected on the platform |
 | **Online Tuning** | STM32F103C8T6 communicates online with PC via FTDI Serial Module for parameter tuning and monitoring system states |
 
-##Functional Diagram
+## Functional Diagram
 ![System Diagram](assets/Functional_Diagram.JPG)
 
 ## Technical Stack
@@ -67,6 +67,7 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 
 ## System Architecture
 ![System Diagram](assets/Layered_Architecture.JPG)
+
 The system follows a **layered architecture structure** to ensure modularity, scalability, and maintainability.
 - **PC Application Layer**: Hosts the **Java GUI**, **Python program** (using OpenCV and Kalman filter for image processing and tracking), and can interface with **MATLAB Control** via TCP/IP.
 - **Communication Layer**: Handles communication between the PC and the embedded system via **UART** (using an FTDI converter) and enables PC-to-PC communication (e.g., Java GUI to MATLAB) via **TCP/IP**.
@@ -95,24 +96,6 @@ The project integrates several key technologies:
 - **User Interface**: **Java-based GUI (JavaFX)** for comprehensive system control and monitoring.
 - **Communication**: **UART** (via FTDI) and **TCP/IP** for data exchange and external control integration (MATLAB/Python).
 
-## Software Workflow
-The system's software pipeline integrates image acquisition, preprocessing, ball detection, coordinate estimation, control signal generation, and actuation.
-1.  **Image Acquisition**: **Python program** captures video frames from the USB webcam.
-2.  **Image Processing & Tracking**: The Python program uses **OpenCV** to preprocess frames, apply **HSV color filtering** to detect the ball and laser pointer, estimate their **X and Y coordinates** and **velocity**. **Filtering** (EMA, Kalman Filter) is applied to enhance position and velocity stability.
-3.  **Data Communication**: Processed ball position and velocity data are transmitted from the Python program (running on the PC) to the **Java GUI** and then to the **STM32 microcontroller** via **UART/FTDI** or can be sent to **MATLAB/Python** via **TCP/IP** for external control.
-4.  **Control Computation**: The **STM32** receives the ball's state data. The selected **control algorithm (PID, PD, or LQR)** computes the necessary corrective action based on the current state and desired setpoint/trajectory.
-5.  **Control Signal Generation**: The control algorithm outputs control signals. An **EMA filter** can be applied to these signals for smoothing.
-6.  **Actuation**: The STM32 generates **PWM signals** based on the control signals. These PWM signals drive the **servo motors**, adjusting the platform's tilt to stabilize the ball or track a trajectory.
-
-## Control System
-The ball balancing system presents a control challenge because its **open-loop transfer function reveals inherent instability** with two poles at the origin. This corresponds to a type 2 system lacking natural damping, requiring control action for stabilization.
-- **Control Objectives**: Prioritized objectives include preventing the ball from falling, reacting to disturbances, controlling position, and trajectory tracking.
-- **Control Strategies**: Multiple algorithms are implemented:
-    - **PID Controller**: Can stabilize the double integrator system. The derivative term (Kd) adds phase lead, contributing damping. The integral term compensates for static friction and eliminates steady-state error, especially during dynamic tracking. We apply the derivative gain (Kv) on the ball's velocity (obtained from the Kalman filter) to avoid derivative kick.
-    - **PD Controller (PV Controller)**: Enhances transient response and stability. Introduces a zero to shift closed-loop poles. Velocity gain is applied to the feedback signal (ball velocity).
-    - **Linear Quadratic Regulator (LQR)**: An additional control strategy implemented.
-- **Modeling**: Equations of motion are derived assuming rolling without slipping and neglecting friction. The system is linearized around the equilibrium point (x=0, y=0) assuming small angles to derive the transfer function. The theoretical model is notably independent of the ball's mass and radius. Servo motor dynamics are modeled as an ideal unit with a time delay.
-- **Implementation Details**: Controllers are implemented on the **STM32**. Velocity estimates are obtained from the Kalman filter in the vision system. An EMA filter is applied to the controller output for smoothing. Parameter tuning is crucial for performance and is available online via the GUI.
 
 ## How to Use It
 The system is controlled primarily through a **Java-based Graphical User Interface (GUI)**.
