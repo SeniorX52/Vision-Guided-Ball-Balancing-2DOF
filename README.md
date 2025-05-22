@@ -95,7 +95,9 @@ The project integrates several key technologies:
 - **Actuation**: **Servo Motors (MG996R)** driven by **PWM signals** from the STM32.
 - **User Interface**: **Java-based GUI (JavaFX)** for comprehensive system control and monitoring.
 - **Communication**: **UART** (via FTDI) and **TCP/IP** for data exchange and external control integration (MATLAB/Python).
+  
 ![System Diagram](assets/Matlab.JPG)
+
 
 ## How to Use It
 The system is controlled primarily through a **Java-based Graphical User Interface (GUI)**.
