@@ -1,6 +1,6 @@
 # Vision-Guided-Ball-Balancing-2DOF
 
-![image](https://github.com/user-attachments/assets/a87af155-99da-4a8d-8de3-41f306dde2ae)
+![System Diagram](assets/BallCatch-ezgif.com-video-to-gif-converter.gif)
 
 ## Table of Contents
 - [Project Description](#project-description)
