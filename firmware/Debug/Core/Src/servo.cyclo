@@ -1,0 +1,10 @@
+../Core/Src/servo.c:16:6:Servo_Init	1
+../Core/Src/servo.c:44:6:Servo_X_SetAngle	3
+../Core/Src/servo.c:54:6:Servo_Y_SetAngle	3
+../Core/Src/servo.c:63:6:Servo_X_Calib	3
+../Core/Src/servo.c:74:6:Servo_Y_Calib	3
+../Core/Src/servo.c:86:6:Servo_X_Save_Calib	1
+../Core/Src/servo.c:91:6:Servo_Y_Save_Calib	1
+../Core/Src/servo.c:97:6:Servo_Reset_Calib	1
+../Core/Src/servo.c:104:6:Flash_Write_Calibration	1
+../Core/Src/servo.c:116:6:Flash_Read_Calibration	3
