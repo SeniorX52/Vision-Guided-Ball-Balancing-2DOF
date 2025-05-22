@@ -14,7 +14,7 @@
 
 ## Project Description
 Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronics Engineering), this project implements a **real-time ball balancing system** using computer vision and embedded control to stabilize and track a ball on a **2-degree-of-freedom (2DOF) tilting platform**. The **primary goal** is to design a system that can dynamically stabilize a rolling ball by adjusting the tilt of a platform in both the x and y directions.
-
+![System Diagram](assets/Main-view)
 ## Key Features
 | Feature | Description |
 |---------|-------------|
@@ -119,3 +119,4 @@ The system is controlled primarily through a **Java-based Graphical User Interfa
 10. **Monitoring**: View real-time tracking of the ball's position on a coordinate grid and visualize system input-output behavior through plotted graphs on the GUI.
 11. **Data Logging**: Export recorded data as CSV files for offline analysis.
 12. **External Control (Optional)**: The GUI can connect to **MATLAB or Python** scripts via **TCP/IP**, allowing control signals to be generated externally, facilitating experimentation with advanced control techniques.
+
