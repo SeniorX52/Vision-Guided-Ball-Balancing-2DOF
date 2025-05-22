@@ -14,7 +14,7 @@
 
 ## Project Description
 Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronics Engineering), this project implements a **real-time ball balancing system** using computer vision and embedded control to stabilize and track a ball on a **2-degree-of-freedom (2DOF) tilting platform**. The **primary goal** is to design a system that can dynamically stabilize a rolling ball by adjusting the tilt of a platform in both the x and y directions.
-![System Diagram](assets/Main view)
+![System Diagram](assets/Main_view.JPG)
 ## Key Features
 | Feature | Description |
 |---------|-------------|
