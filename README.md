@@ -1,6 +1,6 @@
 # Vision-Guided-Ball-Balancing-2DOF
 
-![System Diagram](assets/BallCatch-ezgif.com-video-to-gif-converter.gif)
+![System Diagram](assets/Laserfollow-ezgif.com-video-to-gif-converter.gif)
 
 ## Table of Contents
 - [Project Description](#project-description)
@@ -14,7 +14,8 @@
 
 ## Project Description
 Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronics Engineering), this project implements a **real-time ball balancing system** using computer vision and embedded control to stabilize and track a ball on a **2-degree-of-freedom (2DOF) tilting platform**. The **primary goal** is to design a system that can dynamically stabilize a rolling ball by adjusting the tilt of a platform in both the x and y directions.
-![System Diagram](assets/Laserfollow-ezgif.com-video-to-gif-converter.gif)
+![System Diagram](assets/BallCatch-ezgif.com-video-to-gif-converter.gif)
+
 ## Key Features
 | Feature | Description |
 |---------|-------------|
@@ -23,12 +24,17 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 | **Laser Tracking** | Ball chases a moving laser dot projected on the platform |
 | **Online Tuning** | STM32F103C8T6 communicates online with PC via FTDI Serial Module for parameter tuning and monitoring system states |
 
+##Functional Diagram
+![System Diagram](assets/Functional_Diagram.JPG)
+
 ## Technical Stack
+
 ### Vision System
 - **Python** and **OpenCV** pipeline for image processing, including ball and laser detection.
 - **HSV color filtering** for robust object detection under varying lighting conditions.
 - **Kalman filter** and Exponential Moving Average (EMA) filter for enhancing position stability and trajectory prediction by minimizing noise.
 - Velocity estimation by computing positional change over time.
+![System Diagram](assets/computer_vision.JPG)
 
 ### Control System
 - **PID, PD (PV), and LQR controllers** implemented and tuned for stable balancing.
@@ -36,11 +42,13 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 - **PWM-driven servo motors** (MG996R) actuate platform angles based on control input.
 - **Kalman filter** provides reliable velocity estimates used in the control loop.
 - Exponential Moving Average (EMA) filter applied to the controller's output for smoothing.
+![System Diagram](assets/Filter.JPG)
 
 ### GUI Interface
 - **Java-based Graphical User Interface (GUI)** powered by JavaFX provides full user control.
 - Enables **interactive trajectory drawing**, mode selection, control algorithm switching, real-time monitoring, data logging, and **online parameter tuning**.
 - Communicates with the STM32 via UART through FTDI and opens a TCP/IP socket for communication with external software like MATLAB or Python.
+![System Diagram](assets/GUI_Interface.JPG)
 
 ### Hardware Components
 - **2x MG996R Servo Motors**: High-torque servos for precise two-axis tilt control.
@@ -58,6 +66,7 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 - **Real-Time Performance**: Designed for **real-time** dynamic ball balancing, with a vision pipeline maintaining **tracking performance up to 60 FPS**. System components work cohesively to achieve real-time stabilization.
 
 ## System Architecture
+![System Diagram](assets/Layered_Architecture.JPG)
 The system follows a **layered architecture structure** to ensure modularity, scalability, and maintainability.
 - **PC Application Layer**: Hosts the **Java GUI**, **Python program** (using OpenCV and Kalman filter for image processing and tracking), and can interface with **MATLAB Control** via TCP/IP.
 - **Communication Layer**: Handles communication between the PC and the embedded system via **UART** (using an FTDI converter) and enables PC-to-PC communication (e.g., Java GUI to MATLAB) via **TCP/IP**.
@@ -80,11 +89,11 @@ The physical system consists of a **flat platform mounted on two servo motors** 
 ## Technologies
 The project integrates several key technologies:
 - **Microcontroller**: **STM32F103C8T6 (Bluepill)** running **FreeRTOS**.
-- **Computer Vision**: **Python** and **OpenCV** for real-time image acquisition, preprocessing, object detection (ball and laser), position/velocity estimation, and filtering (EMA, Kalman Filter).
+- **Computer Vision**: **Python** and **OpenCV** for real-time image acquisition, preprocessing, object detection (ball and laser) and position/velocity estimation.
 - **Control Theory**: Implementation of **PID, PD (PV), and LQR** control algorithms. System modeling, linearization, and transfer function analysis. Discretization techniques for digital implementation.
 - **Actuation**: **Servo Motors (MG996R)** driven by **PWM signals** from the STM32.
 - **User Interface**: **Java-based GUI (JavaFX)** for comprehensive system control and monitoring.
-- **Communication**: **UART** (via FTDI) and **TCP/IP** for data exchange and external control integration (MATLAB/Python). Bluetooth is also mentioned for PC communication in introductory sections.
+- **Communication**: **UART** (via FTDI) and **TCP/IP** for data exchange and external control integration (MATLAB/Python).
 
 ## Software Workflow
 The system's software pipeline integrates image acquisition, preprocessing, ball detection, coordinate estimation, control signal generation, and actuation.
