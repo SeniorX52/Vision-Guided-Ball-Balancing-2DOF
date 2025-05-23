@@ -121,7 +121,6 @@ float GetDeltaTime() {
     return (currentTime - previousTime) / SystemCoreClock;
 }
 void LQR_Init(LQR_Controller* ctrl) {
-    // Initialize with your gains
     const float K_init[2][4] = {
         {5.6747f, 0.7304f, 0.0f, 0.0f},
         {0.0f, 0.0f, 5.6747f, 0.7304f}
@@ -189,8 +188,10 @@ void Control_LQR(const float current_state[4], const float desired_state[4], flo
 
 bool newsetpoint=false;
 #include <math.h>
+//->adaptive pid control
 void Control_PID2(PIDController* pid, float setpoint, float measurement, float* output) {
     float dt = 0.01f; // to be measured later after FTDI
+	//afteker takhod el dt elly been kol frame mn elcamera MSH MN ELCLOCK bta3t elSTM
 
     // === position prediction ===
 //    float theta = (pid->prev_output / 180.0f) * 3.14f;
@@ -250,6 +251,7 @@ void Control_PID2(PIDController* pid, float setpoint, float measurement, float* 
     *output = ALPHA * pid->prev_output + (1.0f - ALPHA) * output_raw;
     pid->prev_output = *output;
 }
+//conventional pid control
 void Control_PID(PIDController* pid,float setpoint, float measurement, float* output){
 	//UpdateTime();
 	//dt = GetDeltaTime();
@@ -389,7 +391,7 @@ void Control_Loop(){
 	UART_sendString(debug_buf2);
 	UART_sendString("\r\n");
 	memset(debug_buf2, 0, sizeof(debug_buf2));
-	//HAL_Delay(17);
+	//HAL_Delay(17); //we already use rtos no neeeeed for delay
 
 }
 void LeadCompensator_Update(LeadFilter* comp, float setpoint, float measurement, float* output) {
