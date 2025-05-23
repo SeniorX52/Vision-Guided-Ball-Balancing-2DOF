@@ -43,12 +43,17 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 - **Kalman filter** provides reliable velocity estimates used in the control loop.
 - Exponential Moving Average (EMA) filter applied to the controller's output for smoothing.
 ![System Diagram](assets/Filter.JPG)
+![image](https://github.com/user-attachments/assets/6dff025e-bbef-44f1-8792-ab866a891358)
 
 ### GUI Interface
 - **Java-based Graphical User Interface (GUI)** powered by JavaFX provides full user control.
 - Enables **interactive trajectory drawing**, mode selection, control algorithm switching, real-time monitoring, data logging, and **online parameter tuning**.
 - Communicates with the STM32 via UART through FTDI and opens a TCP/IP socket for communication with external software like MATLAB or Python.
 ![System Diagram](assets/GUI_Interface.JPG)
+
+### Trajectory tracking
+-Circle trajectory
+![image](https://github.com/user-attachments/assets/01747f3a-a732-4260-9d7d-8270f493be6a)
 
 ### Hardware Components
 - **2x MG996R Servo Motors**: High-torque servos for precise two-axis tilt control.
