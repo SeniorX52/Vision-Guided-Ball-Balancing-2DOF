@@ -53,9 +53,11 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 
 ### Trajectory tracking
 -Circle trajectory
+
 ![image](https://github.com/user-attachments/assets/01747f3a-a732-4260-9d7d-8270f493be6a)
 
-![System Diagram](assets/circlemovement.gif)
+![System Diagram](assets/Circlemovement.gif)
+
 
 ### Hardware Components
 - **2x MG996R Servo Motors**: High-torque servos for precise two-axis tilt control.
