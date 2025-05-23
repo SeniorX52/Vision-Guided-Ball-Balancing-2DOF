@@ -17,13 +17,12 @@ import sys
 from collections import deque
 from threading import Thread
 
-# Constants
+
 grid_mm = 320
 MIN_MOVEMENT_MM = 0
 VELOCITY_FILTER_WINDOW = 1
 NUM_AVG_FRAMES = 3
 
-# Global variables
 prev_pos_ball = None
 prev_pos_laser = None
 prev_time = time.time()
@@ -37,10 +36,8 @@ camera_selection_active = True
 
 
 def list_available_cameras(max_to_test=5):
-    """Check available cameras by trying to open them with reduced verbosity"""
     available_ports = []
 
-    # Save current OpenCV log level
     log_level = cv2.getLogLevel()
     # Suppress warnings temporarily
     cv2.setLogLevel(0)
@@ -52,15 +49,12 @@ def list_available_cameras(max_to_test=5):
                 available_ports.append(port)
                 cap.release()
             else:
-                # Try without DSHOW backend if DSHOW fails
                 cap = cv2.VideoCapture(port)
                 if cap.isOpened():
                     available_ports.append(port)
                     cap.release()
         except:
             pass
-
-    # Restore original log level
     cv2.setLogLevel(log_level)
     return available_ports
 
@@ -71,16 +65,13 @@ def show_camera_selection():
 
     cameras = list_available_cameras()
     if not cameras:
-        cameras = [0]  # Fallback to camera 0 if none detected
+        cameras = [0]  
 
-    # Create selection window
     cv2.namedWindow("Camera Selection", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("Camera Selection", 800, 600)
 
-    # Create trackbar for camera selection
     cv2.createTrackbar("Camera Port", "Camera Selection", 0, len(cameras)-1, lambda x: None)
 
-    # Create temporary VideoCapture objects for all cameras
     caps = []
     for port in cameras:
         cap = cv2.VideoCapture(port, cv2.CAP_DSHOW)
@@ -88,34 +79,28 @@ def show_camera_selection():
             cap = cv2.VideoCapture(port)
         caps.append(cap)
 
-    # Add help text
+
     help_text = f"Available cameras: {cameras}\nPress ENTER to confirm selection\nESC to cancel"
 
     preview_width = 640
     preview_height = 480
 
     while camera_selection_active:
-        # Get current selection
         selected_idx = cv2.getTrackbarPos("Camera Port", "Camera Selection")
         selected_port = cameras[selected_idx]
-
-        # Get frame from currently selected camera
         ret, frame = caps[selected_idx].read()
         if not ret:
             frame = np.zeros((preview_height, preview_width, 3), np.uint8)
             cv2.putText(frame, "No signal from camera", (50, preview_height//2),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-        # Resize preview to fit in our window
         preview = cv2.resize(frame, (preview_width, preview_height))
 
-        # Create display image with preview and info
+
         display_img = np.zeros((600, 800, 3), np.uint8)
 
-        # Place camera preview at top
         display_img[0:preview_height, 0:preview_width] = preview
 
-        # Display instructions and current selection
         y = preview_height + 30
         for line in help_text.split('\n'):
             cv2.putText(display_img, line, (10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
@@ -127,16 +112,15 @@ def show_camera_selection():
         cv2.imshow("Camera Selection", display_img)
 
         key = cv2.waitKey(1) & 0xFF
-        if key == 13:  # ENTER key
+        if key == 13:  
             camera_port = selected_port
             camera_selection_active = False
             break
-        elif key == 27:  # ESC key
+        elif key == 27: 
             camera_port = None
             camera_selection_active = False
             break
 
-    # Release all camera resources
     for cap in caps:
         cap.release()
     cv2.destroyWindow("Camera Selection")
@@ -145,7 +129,6 @@ class VideoStream:
     """Threaded video stream to improve FPS"""
 
     def __init__(self, src=0):
-        # Try DSHOW first, fall back to default backend if needed
         self.stream = cv2.VideoCapture(src, cv2.CAP_DSHOW)
         if not self.stream.isOpened():
             self.stream = cv2.VideoCapture(src)
@@ -175,11 +158,9 @@ class VideoStream:
 
 def setup_hsv_sliders():
     """Initialize the HSV adjustment windows with trackbars"""
-    # Ball HSV settings
     cv2.namedWindow("ball hsv settings", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("ball hsv settings", 400, 300)
 
-    # Default values for yellow ball
     cv2.createTrackbar("ball h low", "ball hsv settings", 12, 179, lambda x: None)
     cv2.createTrackbar("ball s low", "ball hsv settings", 90, 255, lambda x: None)
     cv2.createTrackbar("ball v low", "ball hsv settings", 90, 255, lambda x: None)
@@ -187,11 +168,9 @@ def setup_hsv_sliders():
     cv2.createTrackbar("ball s high", "ball hsv settings", 255, 255, lambda x: None)
     cv2.createTrackbar("ball v high", "ball hsv settings", 255, 255, lambda x: None)
 
-    # Laser HSV settings
     cv2.namedWindow("laser hsv settings", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("laser hsv settings", 400, 300)
 
-    # Default values for red laser
     cv2.createTrackbar("laser h low", "laser hsv settings", 2, 179, lambda x: None)
     cv2.createTrackbar("laser s low", "laser hsv settings", 0, 255, lambda x: None)
     cv2.createTrackbar("laser v low", "laser hsv settings", 16, 255, lambda x: None)
@@ -199,7 +178,6 @@ def setup_hsv_sliders():
     cv2.createTrackbar("laser s high", "laser hsv settings", 255, 255, lambda x: None)
     cv2.createTrackbar("laser v high", "laser hsv settings", 255, 255, lambda x: None)
 
-    # Common settings
     cv2.namedWindow("processing settings", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("processing settings", 400, 100)
     cv2.createTrackbar("use morpho", "processing settings", 1, 1, lambda x: None)
@@ -268,12 +246,9 @@ def find_object(img, low, high):
 
     # Conditional morphological operations
     if use_morpho:
-        # Smaller kernel for better performance
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-
-    # Find contours - using fastest method
     cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     if cnts:
@@ -300,18 +275,15 @@ def draw_visualization(frame, ball_pos, laser_pos):
         cv2.line(frame, (px, 0), (px, frame.shape[0]), (100, 100, 100), 1)
         cv2.line(frame, (0, px), (frame.shape[1], px), (100, 100, 100), 1)
 
-    # Draw center lines
     mid_x, mid_y = frame.shape[1] // 2, frame.shape[0] // 2
     cv2.line(frame, (mid_x, 0), (mid_x, frame.shape[0]), (0, 255, 0), 2)
     cv2.line(frame, (0, mid_y), (frame.shape[1], mid_y), (0, 255, 0), 2)
 
-    # Draw ball if detected
     if ball_pos:
         cx = int((ball_pos[0] + grid_mm / 2) * frame.shape[1] / grid_mm)
         cy = int((grid_mm / 2 - ball_pos[1]) * frame.shape[0] / grid_mm)
         cv2.circle(frame, (cx, cy), 10, (0, 255, 255), -1)
 
-    # Draw laser if detected
     if laser_pos:
         lx = int((laser_pos[0] + grid_mm / 2) * frame.shape[1] / grid_mm)
         ly = int((grid_mm / 2 - laser_pos[1]) * frame.shape[0] / grid_mm)
