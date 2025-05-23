@@ -55,6 +55,8 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 -Circle trajectory
 ![image](https://github.com/user-attachments/assets/01747f3a-a732-4260-9d7d-8270f493be6a)
 
+![System Diagram](assets/circlemovement.gif)
+
 ### Hardware Components
 - **2x MG996R Servo Motors**: High-torque servos for precise two-axis tilt control.
 - **USB Webcam**: Mounted above the platform to capture real-time video of the ball's position.
