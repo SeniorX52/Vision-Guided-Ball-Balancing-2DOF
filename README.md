@@ -1,6 +1,6 @@
 # Vision-Guided Ball Balancing with Trajectory and Laser Tracking
 
-![System Diagram](assets/Laserfollow-ezgif.com-video-to-gif-converter.gif)
+![System Diagram](assets/laser_gif.gif)
 
 ## Table of Contents
 - [Project Description](#project-description)
