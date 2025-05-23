@@ -70,6 +70,9 @@ Developed during **MCTR601 Mechatronics Engineering** course (BSc in Mechatronic
 - **Power Distribution Board**
 - **Tiltable platform**
 
+- ![image](https://github.com/user-attachments/assets/b1a44b96-4d5a-4e96-8318-b25457b61c7a)
+
+
 ## Project Highlights
 - **Multidisciplinary Integration**: Effectively integrates embedded systems, computer vision, and control theory.
 - **Real-Time Performance**: Designed for **real-time** dynamic ball balancing, with a vision pipeline maintaining **tracking performance up to 60 FPS**. System components work cohesively to achieve real-time stabilization.
