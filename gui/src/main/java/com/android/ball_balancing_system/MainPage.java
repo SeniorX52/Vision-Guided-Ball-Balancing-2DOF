@@ -59,7 +59,7 @@ public class MainPage implements Initializable {
     private final List<double[]> pathPoints = new ArrayList<>();
     ScheduledExecutorService sendToSTM32executor = Executors.newSingleThreadScheduledExecutor();
     private float base_angularVelocity = 3.49F;
-    private float TOLERANCE = 0; // Desired point tolerance
+    private float TOLERANCE = 0; 
     private byte operationMode;
     @FXML
     private Canvas plateCanvas;
@@ -342,7 +342,6 @@ public class MainPage implements Initializable {
         idle_RadioButton.setToggleGroup(servo_modes_toggleGroup);
         control_toggleGroup.selectedToggleProperty().addListener((_, _, newVal) -> {
             if (newVal == null) {
-                // If somehow nothing is selected, revert to automatic
                 PIDToggleButton.setSelected(true);
                 return;
             }
@@ -378,7 +377,6 @@ public class MainPage implements Initializable {
             pathToggleButton.setOpacity(0.5);
             clearTrajectory();
             if (newVal == null) {
-                // If somehow nothing is selected, revert to automatic
                 trajectoryMode=0;
                 point_RadioButton.setSelected(true);
                 return;
@@ -456,11 +454,11 @@ public class MainPage implements Initializable {
     public void startPRBSInput() {
         prbsTimeline = new Timeline();
 
-        double center = 0;          // Midpoint of servo range
-        double amplitude = 16.4*alpha;       // Safe swing
-        double interval = 0.01;        // 50 ms
+        double center = 0;      
+        double amplitude = 16.4*alpha;      
+        double interval = 0.01;        
         int durationInSeconds = 10;
-        double frequency = 0.1;        // Sine wave frequency in Hz
+        double frequency = 0.1;      
 
         int steps = (int) (durationInSeconds / interval);
 
@@ -860,8 +858,7 @@ public class MainPage implements Initializable {
         matlabThread = new Thread(() -> {
             try {
                 while (running && !matlabSocket.isClosed()) {
-                    // Example: send a test float (position)
-                    float position = 0; // Your method
+                    float position = 0; 
                     matlabOut.writeFloat(position);
                     matlabOut.writeFloat(desiredX);
                     matlabOut.writeFloat(desiredY);
@@ -870,8 +867,6 @@ public class MainPage implements Initializable {
                     matlabOut.writeFloat(current_velocity_X);
                     matlabOut.writeFloat(current_velocity_Y);
                     matlabOut.flush();
-
-                    // Receive control signal from MATLAB
                     manualAngleX = matlabIn.readFloat();
                     manualAngleY = matlabIn.readFloat();
                     System.out.println("X: " + manualAngleX + ", Y: " + manualAngleY);
@@ -898,7 +893,7 @@ public class MainPage implements Initializable {
             if (matlabIn != null) matlabIn.close();
             if (matlabOut != null) matlabOut.close();
             if (matlabThread != null && matlabThread.isAlive()) {
-                matlabThread.join(); // Wait for thread to stop
+                matlabThread.join(); 
             }
             System.out.println("Disconnected from MATLAB.");
         } catch (IOException | InterruptedException e) {
@@ -947,7 +942,6 @@ public class MainPage implements Initializable {
                     byte[] data = toByteArray();
                     byte checksum = calculateChecksum(data);
 
-                    // Configure generous timeout (5 seconds)
                     serialPort.setComPortTimeouts(
                             SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
                             5000,  // Read timeout
@@ -982,7 +976,7 @@ public class MainPage implements Initializable {
     private byte calculateChecksum(byte[] data) {
         byte checksum = 0;
         for (byte b : data) {
-            checksum ^= b; // XOR each byte
+            checksum ^= b; 
         }
         return checksum;
     }
@@ -995,7 +989,6 @@ public class MainPage implements Initializable {
             cameraTrackingToggleButton.setText("Stop Camera Tracking");
 //            systemMessages.appendText("\nStarted reading ball position from camera...");
         } else {
-            // Button was toggled OFF
             stopReadingTerminalOutput();
             cameraTrackingToggleButton.setText("Start Camera Tracking");
             currentX=0;
@@ -1051,7 +1044,6 @@ public class MainPage implements Initializable {
                 errorReaderThread.setDaemon(true);
                 errorReaderThread.start();
 
-                // Normal output reader
                 String line;
                 while (readingTerminal && (line = reader.readLine()) != null) {
                     final String message = line;
@@ -1077,14 +1069,11 @@ public class MainPage implements Initializable {
                                 if (kalmanFilterisEnabled) {
                                     if (ball_detected) {
                                         ball_counter = 0;
-
-                                        // Initialize Kalman filters if they don't exist
                                         if (kf == null) {
                                             kf = new KalmanFilter(x, y);
                                             kf_v = new KalmanFilter(vx, vy, 0.01, 0.3);
                                             kf_laser = new KalmanFilter(laser_x, laser_y, 0.001, 5);
                                         } else {
-                                            // Update Kalman filters with new measurements
                                             kf.enta_shayf_eh();
                                             kf_v.enta_shayf_eh();
                                             kf_v.khod_faltar(vx, vy);
@@ -1101,11 +1090,8 @@ public class MainPage implements Initializable {
                                             laser_y = kf_laser.getY();
                                         }
                                     } else if (ball_counter == 0) {
-                                        // Ball not detected - reset state
                                         setDesiredPosition(0, 0);
                                         ball_counter++;
-
-                                        // Reset Kalman filters
                                         kf = null;
                                         kf_v = null;
                                         kf_laser = null;
@@ -1595,15 +1581,11 @@ public class MainPage implements Initializable {
         double centerX = width / 2;
         double centerY = height / 2;
 
-        // Clear canvas
         gc.clearRect(0, 0, width, height);
 
-        // Draw grid
         gc.setStroke(GRID_COLOR);
         gc.setLineWidth(1);
 
-
-        // Draw vertical grid lines
         for (int x = (int) MIN_VALUE; x <= MAX_VALUE; x += 1) {
             double screenX = logicalToScreenX(x);
             gc.strokeLine(screenX, 0, screenX, height);
@@ -1613,53 +1595,38 @@ public class MainPage implements Initializable {
             }
         }
 
-        // Draw horizontal grid lines
         for (int y = (int) MIN_VALUE; y <= MAX_VALUE; y += 1) {
             double screenY = logicalToScreenY(y);
             gc.strokeLine(0, screenY, width, screenY);
-            // Draw grid labels
             if (y % 2 == 0) {
                 gc.fillText(Integer.toString(y), centerX + 10, screenY);
             }
 
         }
 
-        // Draw axes
         gc.setStroke(ORIGIN_COLOR);
         gc.setLineWidth(2);
         // X axis
         gc.strokeLine(0, centerY, width, centerY);
         // Y axis
         gc.strokeLine(centerX, 0, centerX, height);
-
-        // Draw trajectory path (enhanced)
         if (!trajectoryPoints.isEmpty()) {
             gc.setStroke(TRAJECTORY_COLOR);
             double TRAJECTORY_LINE_WIDTH = 1.5;
             gc.setLineWidth(TRAJECTORY_LINE_WIDTH);
-
-            // Create a gradient for the trajectory path
-            gc.setStroke(Color.LIMEGREEN); // Brighter color for better visibility
-
-            // Draw the path with smoothing
+            gc.setStroke(Color.LIMEGREEN);
             double[] firstPoint = logicalToScreen(trajectoryPoints.getFirst()[0], trajectoryPoints.getFirst()[1]);
             gc.beginPath();
             gc.moveTo(firstPoint[0], firstPoint[1]);
-
-            // Draw the main path
             for (int i = 1; i < trajectoryPoints.size(); i++) {
                 double[] point = logicalToScreen(trajectoryPoints.get(i)[0], trajectoryPoints.get(i)[1]);
                 gc.lineTo(point[0], point[1]);
-
-                // Fade out older points
-                if (i > trajectoryPoints.size() - 50) { // Last 50 points
+                if (i > trajectoryPoints.size() - 50) { 
                     double opacity = 0.2 + 0.8 * (i - (trajectoryPoints.size() - 50)) / 50.0;
-                    gc.setStroke(Color.rgb(50, 205, 50, opacity)); // LimeGreen with opacity
+                    gc.setStroke(Color.rgb(50, 205, 50, opacity)); 
                 }
             }
             gc.stroke();
-
-            // Draw a glowing effect for the most recent points
             if (trajectoryPoints.size() > 5) {
                 gc.setStroke(Color.LIMEGREEN);
                 gc.setLineWidth(TRAJECTORY_LINE_WIDTH * 1.5);
@@ -1676,14 +1643,10 @@ public class MainPage implements Initializable {
             gc.setStroke(TRAJECTORY_COLOR);
             double TRAJECTORY_LINE_WIDTH = 1.5;
             gc.setLineWidth(TRAJECTORY_LINE_WIDTH);
-
-            // Create a gradient for the path
-            gc.setStroke(Color.RED); // Brighter color for better visibility
+            gc.setStroke(Color.RED); 
             double[] firstPoint = logicalToScreen(pathPoints.getFirst()[0], pathPoints.getFirst()[1]);
             gc.beginPath();
             gc.moveTo(firstPoint[0], firstPoint[1]);
-
-            // Draw the main path
             for (int i = 1; i < pathPoints.size(); i++) {
                 double[] point = logicalToScreen(pathPoints.get(i)[0], pathPoints.get(i)[1]);
                 gc.lineTo(point[0], point[1]);
@@ -1838,24 +1801,22 @@ public class MainPage implements Initializable {
     private void drawArrow(GraphicsContext gc, double x1, double y1, double x2, double y2) {
         gc.strokeLine(x1, y1, x2, y2);
 
-        // Use angle based on already screen-correct coordinates
+
         double angle = Math.atan2(y2 - y1, x2 - x1);
         double arrowHeadLength = 10;
         double arrowHeadAngle = Math.toRadians(20);
 
         double xArrow1 = x2 - arrowHeadLength * Math.cos(angle - arrowHeadAngle);
-        double yArrow1 = y2 - arrowHeadLength * Math.sin(angle - arrowHeadAngle);  // ← back to minus
+        double yArrow1 = y2 - arrowHeadLength * Math.sin(angle - arrowHeadAngle); 
 
         double xArrow2 = x2 - arrowHeadLength * Math.cos(angle + arrowHeadAngle);
-        double yArrow2 = y2 - arrowHeadLength * Math.sin(angle + arrowHeadAngle);  // ← back to minus
+        double yArrow2 = y2 - arrowHeadLength * Math.sin(angle + arrowHeadAngle);  
 
         gc.strokeLine(x2, y2, xArrow1, yArrow1);
         gc.strokeLine(x2, y2, xArrow2, yArrow2);
     }
 
 
-
-    // Coordinate conversion methods
     private double logicalToScreenX(double logicalX) {
         return plateCanvas.getWidth() / 2 + (logicalX * plateCanvas.getWidth() / (MAX_VALUE - MIN_VALUE));
     }
