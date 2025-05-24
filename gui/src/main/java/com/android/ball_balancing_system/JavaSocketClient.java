@@ -7,8 +7,8 @@ public class JavaSocketClient {
 
     private Socket socket;
     private PrintWriter out;
-    private final String host = "127.0.0.1";  // Python server address
-    private final int port = 65432;           // Port number for the Python server
+    private final String host = "127.0.0.1";  
+    private final int port = 65432;         
     private boolean isConnected=false;
     public JavaSocketClient() {
 
@@ -104,7 +104,7 @@ public class JavaSocketClient {
                             }
                         }
                     } else {
-                        Thread.sleep(10); // avoid busy loop
+                        Thread.sleep(10);
                     }
                 }
 
