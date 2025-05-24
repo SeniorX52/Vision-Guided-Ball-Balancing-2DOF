@@ -15,7 +15,6 @@ public class PathSmoother {
      */
     public static void simplifyAndSmoothPath(List<double[]> points, int targetPointCount, int smoothingPasses) {
         if (points.size() <= targetPointCount) {
-            // Already simple enough, just smooth it
             smoothPath(points);
             return;
         }
