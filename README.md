@@ -1,4 +1,4 @@
-# Vision-Guided Ball Balancing with Trajectory and Laser Tracking
+# 2DOF Ball Balancing Plate using STM32, OpenCV, and PID/LQR Control
 
 ![System Diagram](assets/laser_gif.gif)
 
