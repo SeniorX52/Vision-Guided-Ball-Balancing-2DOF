@@ -1,4 +1,4 @@
-# 2DOF Ball Balancing Plate using STM32, OpenCV, and PID/LQR Control
+# 2DOF Ball Balancing Plate using STM32, OpenCV, and PID Control
 
 ![System Diagram](assets/laser_gif.gif)
 
